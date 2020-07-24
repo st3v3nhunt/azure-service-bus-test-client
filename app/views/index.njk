@@ -23,6 +23,13 @@
       </div>
 
       <div class="field">
+        <label class="label">Message Id</label>
+        <div class="control">
+          <input class="input" type="text" name="messageId">
+        </div>
+      </div>
+
+      <div class="field">
         <label class="label">Message</label>
         <div class="control">
           <textarea class="textarea" name="message"></textarea>
@@ -68,14 +75,18 @@
     var form = $(this);
     var url = form.attr('action')
 
+    setTimeout(() => {
+      $('#send').removeClass('is-loading')
+    }, 2000)
+
     $.ajax({
       type: "POST",
       url: url,
       data: form.serialize(),
-      success: function (data) {        
+      success: function (data) {
         $('#result-text').html(data)
-        $('#send').removeClass('is-loading')
         $('#result').fadeIn(2000)
+        $('#send').removeClass('is-loading')
       }
     })
   })
