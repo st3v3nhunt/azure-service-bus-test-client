@@ -50,14 +50,13 @@ router.post('/', [
 
   const msg = JSON.parse(message)
   msg[messageId] = uuidv1()
-  console.log(msg)
 
   const messageToSend = format === 'json' ? msg : JSON.stringify(msg)
-  console.log('Sending message:', messageToSend)
   const response = await sendMessage(
     connectionString,
     queue,
-    messageToSend
+    messageToSend,
+    format
   )
   res.send(response)
 })

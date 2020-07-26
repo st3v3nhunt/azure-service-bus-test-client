@@ -1,7 +1,8 @@
 const rheaPromise = require('rhea-promise')
 
-async function sendMessage (connectionString, queue, message) {
-  console.log(`preparing to send ${message} to ${queue} queue`)
+async function sendMessage (connectionString, queue, message, format) {
+  console.log(`sending ${format} message to ${queue} queue`)
+  console.log(message)
   let connectionOptions = {}
 
   try {
@@ -15,7 +16,6 @@ async function sendMessage (connectionString, queue, message) {
   const senderOptions = configureSender(queue)
 
   try {
-    console.log(`sending message ${message}`)
     await connection.open()
     const sender = await connection.createAwaitableSender(senderOptions)
     await sender.send({ body: message })
@@ -64,7 +64,7 @@ function parseConnectionString (connectionString) {
   const sharedAccessKeyName = connectionString.substring(sharedAccessKeyNameFlagLocation + sharedAccessKeyNameFlag.length, sharedAccessKeyFlagLocation)
   const SharedAccessKey = connectionString.substring(sharedAccessKeyFlagLocation + sharedAccessKeyFlag.length, entityPathLocation > -1 ? entityPathLocation : connectionString.length)
 
-  const connectionOptions = {
+  return {
     transport: 'ssl',
     host: host,
     hostname: host,
@@ -73,8 +73,6 @@ function parseConnectionString (connectionString) {
     port: 5671,
     reconnect: false
   }
-  console.log('connection string parsed')
-  return connectionOptions
 }
 
 module.exports = sendMessage
