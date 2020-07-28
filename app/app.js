@@ -35,7 +35,7 @@ router.post('/', [
     .withMessage('Invalid queue')
     .trim(),
   check('messageId').isLength({ min: 2 })
-    .withMessage('Message Id property name missing')
+    .withMessage('Message Id Property Name missing')
     .trim(),
   check('message')
     .isJSON()
