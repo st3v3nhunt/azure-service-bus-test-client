@@ -77,7 +77,7 @@
 
     setTimeout(() => {
       $('#send').removeClass('is-loading')
-    }, 2000)
+    }, 500)
 
     $.ajax({
       type: "POST",
@@ -85,7 +85,7 @@
       data: form.serialize(),
       success: function (data) {
         $('#result-text').html(data)
-        $('#result').fadeIn(2000)
+        $('#result').fadeIn(200)
         $('#send').removeClass('is-loading')
       }
     })
