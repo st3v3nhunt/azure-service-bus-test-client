@@ -7,32 +7,31 @@
     <h1 class="title is-2">Azure Service Bus Test Client</h1>
 
     <form id="frm-message" action="/">
-
       <div class="field">
         <label class="label">Connection String</label>
         <div class="control">
-          <input class="input" type="text" name="connectionString">
+          <input class="input" type="text" name="connectionString" value="{{ body.connectionString }}">
         </div>
       </div>
 
       <div class="field">
         <label class="label">Queue</label>
         <div class="control">
-          <input class="input" type="text" name="queue">
+          <input class="input" type="text" name="queue" value="{{ body.queue }}">
         </div>
       </div>
 
       <div class="field">
         <label class="label">Message Id Property Name</label>
         <div class="control">
-          <input class="input" type="text" name="messageId">
+          <input class="input" type="text" name="messageId" value="{{ body.messageId }}">
         </div>
       </div>
 
       <div class="field">
         <label class="label">Message</label>
         <div class="control">
-          <textarea class="textarea" name="message"></textarea>
+          <textarea class="textarea" name="message" placeholder="enter message" rows="7">{{ body.message }}</textarea>
         </div>
       </div>
 
@@ -63,7 +62,6 @@
       </div>
     </article>
   </div>
-
 </div>
 
 <script>

@@ -1,4 +1,5 @@
 const { v1: uuidv1 } = require('uuid')
+const cookieSession = require('cookie-session')
 const express = require('express')
 const app = express()
 const router = express.Router()
@@ -15,11 +16,17 @@ nunjucks.configure('./app/views', {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieSession({
+  name: 'session',
+  maxAge: 28 * 24 * 60 * 60 * 1000, // 28 days in millis
+  secret: 'secret'
+}))
 
 app.use(favicon('./app/favicon.ico'))
 
 router.get('/', function (req, res) {
-  res.render('index.njk')
+  const { session: { body } } = req
+  res.render('index.njk', { body })
 })
 
 router.post('/', [
@@ -47,6 +54,9 @@ router.post('/', [
     return res.send(errors.array().map(x => `<p>${x.msg}</p>`))
   }
   const { connectionString, format, message, messageId, queue } = req.body
+
+  // set session to contain body
+  req.session.body = req.body
 
   const msg = JSON.parse(message)
   msg[messageId] = uuidv1()
