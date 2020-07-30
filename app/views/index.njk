@@ -52,26 +52,44 @@
         <div class="control">
           <button class="button is-link" id="send">Send</button>
         </div>
+          <p>Messages attempted to be sent <span id="message-count-total"></span></p>
+          <p>Messages successfully sent <span id="message-count-success"></span></p>
+          <p>Messages failed to be sent <span id="message-count-error"></span></p>
       </div>
     </form>
   </div>
 
-  <div id="result" class="column" style="display: none">
+  <div id="results" class="column" style="display: none">
     <article class="message is-primary">
-      <div id="result-text" class="message-body">
+      <div class="message-header">
+        <p>Latest result</p>
       </div>
+      <div id="latest-result-text" class="message-body">
+      </div>
+    </article>
+    <article id="previous-results-banner" class="message is-info is-hidden">
+      <div class="message-header">
+        <p>Previous results</p>
+      </div>
+    </article>
+    <article class="message is-info is-small">
     </article>
   </div>
 </div>
 
 <script>
+  let messageCountTotal = 0
+  let messageCountSuccess = 0
+  let messageCountError = 0
+
   $("#frm-message").submit(function (e) {
+    messageCountTotal += 1
+    $('#message-count-total').html(messageCountTotal)
     e.preventDefault()
     $('#send').addClass('is-loading')
-    $('#result').fadeOut(0)
 
-    var form = $(this);
-    var url = form.attr('action')
+    const form = $(this);
+    const url = form.attr('action')
 
     setTimeout(() => {
       $('#send').removeClass('is-loading')
@@ -81,9 +99,24 @@
       type: "POST",
       url: url,
       data: form.serialize(),
-      success: function (data) {
-        $('#result-text').html(data)
-        $('#result').fadeIn(200)
+      error: (data) => {
+        messageCountError += 1
+        $('#message-count-error').html(messageCountError)
+        console.log('ERROR...', data)
+      },
+      success: (data) => {
+        messageCountSuccess += 1
+        $('#message-count-success').html(messageCountSuccess)
+        const lastResult = $('#latest-result-text').html()
+        if (lastResult.trim()) {
+          $('.message.is-info.is-small').prepend(`<div id="previous-result-text" class="message-body">${lastResult}</div>`)
+        }
+        if (messageCountTotal === 2) {
+          $('#previous-results-banner').removeClass('is-hidden')
+        }
+        $('#latest-result-text').html(data)
+
+        $('#results').fadeIn(200)
         $('#send').removeClass('is-loading')
       }
     })
