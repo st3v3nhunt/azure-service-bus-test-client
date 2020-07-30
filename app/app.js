@@ -55,7 +55,7 @@ router.post('/', [
   }
   const { connectionString, format, message, messageId, queue } = req.body
 
-  // set session to contain body
+  // set session to contain body, might want to set specific properties to avoid it being overloaded
   req.session.body = req.body
 
   const msg = JSON.parse(message)
