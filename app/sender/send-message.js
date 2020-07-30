@@ -26,7 +26,7 @@ async function sendMessage (connectionString, queue, message, format) {
     console.error('unable to send message', err)
     return JSON.stringify(err)
   }
-  return 'Message sent'
+  return `Message sent - ${JSON.stringify(message)}`
 }
 
 function configureSender (address) {
